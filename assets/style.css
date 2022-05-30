@@ -90,10 +90,6 @@ header {
 
   .question-btn {
     display: block;
+    margin-bottom: 15px;
   }
 
-  .question-btn:hover {
-    box-shadow: 0 2px var(--shadow);
-    top: -2px;
-    background: var(--secondary);
-  }
