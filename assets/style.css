@@ -93,3 +93,6 @@ header {
     margin-bottom: 15px;
   }
 
+#view-score:hover {
+    cursor: pointer;
+}
