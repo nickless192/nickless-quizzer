@@ -104,3 +104,8 @@ cursor: pointer;
     font-style: italic;
     
 }
+
+.form-text {
+    font-size: 20px;
+    display: inline-block;
+}

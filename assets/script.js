@@ -237,6 +237,37 @@ var generateQuestion = function() {
 
 }
 
+var stopGame = function() {
+
+    removeQuestion();
+    //feedbackEl.remove();
+    timeLeft = 0;
+
+    console.log("game over! you score is " + score);
+
+    var doneHeaderEl = document.createElement("h2");
+    doneHeaderEl.className = "main-title";
+    doneHeaderEl.textContent = "All done!";
+    var scorePEl = document.createElement("p");
+    scorePEl.className = "form-text";
+    scorePEl = `Your final score is ${score}.`;
+    var formEl = document.createElement("form");
+    var formTextEl = document.createElement("p");
+    formTextEl.className = "form-text";
+    formTextEl.textContent = "Enter initials: ";
+    var textboxEl = document.createElement("input");
+    textboxEl.type = "text";
+    textboxEl.className = "form-text";
+    var submitBtnEl = document.createElement("button");
+    submitBtnEl.textContent = "Submit";
+    submitBtnEl.className = "btn";
+
+    formEl.append(formTextEl, textboxEl, submitBtnEl);
+
+    mainContainer.prepend(doneHeaderEl, scorePEl, formEl);
+
+}
+
 var startTimer = function() {
 
     timerEl.textContent = timeLeft;
@@ -250,7 +281,12 @@ var startTimer = function() {
         else {
             timerEl.textContent = timeLeft;
             clearInterval(timeInterval);
-            // trigger quiz stop
+            // trigger stopGame here only if time ran out; if timeLeft is set to 0 after game is complete, this will prevent it from executing twice
+            if (qCounter < 20) {
+                // trigger quiz stop
+                stopGame();
+            }
+
         }
     }, 1000);
 
@@ -305,9 +341,11 @@ var mainContainerHandler = function (event) {
         //validateAnswer(event.target.getAttribute("data-option"));
         validateAnswer(event.target);
         // remove current question
-        removeQuestion();
+        stopGame();
+
+        //removeQuestion();
         //prompt game ending
-        alert("Game completed!")
+        //alert("Game completed!")
         //prompt to ask user name and generate score
 
         //reset screen and game
@@ -323,6 +361,9 @@ var mainContainerHandler = function (event) {
         // prompt for a new question if there's time
         generateQuestion();
 
+    } else if (timeLeft === 0) {
+        // remove current question
+        stopGame();
     }
     
 }
