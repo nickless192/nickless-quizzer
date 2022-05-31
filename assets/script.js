@@ -4,7 +4,8 @@ var introContainer = document.querySelector(".intro-container");
 var viewScoreBtn = document.getElementById("view-score");
 var qCounter = 0;
 var score = 0;
-var timer = 75;
+var timerEl = document.getElementById("timer");
+var timeLeft = 75;
 
 var questionsObj = [{
     question: "What is JavaScript?",
@@ -227,13 +228,32 @@ var generateQuestion = function() {
 
 }
 
+var startTimer = function() {
+
+    timerEl.textContent = timeLeft;
+    timeLeft--;
+
+    var timeInterval = setInterval(function() {
+        if (timeLeft !== 0) {
+            timerEl.textContent = timeLeft;
+            timeLeft--;
+        }
+        else {
+            timerEl.textContent = timeLeft;
+            clearInterval(timeInterval);
+            // trigger quiz stop
+        }
+    }, 1000);
+
+}
+
 var startQuiz = function () {
-    
     introContainer.remove();
     generateQuestion();  
-
+    
     // start timer counter
-
+    timeLeft = 75;
+    startTimer(timeLeft);
 }
 
 var removeQuestion = function () {
@@ -242,7 +262,6 @@ var removeQuestion = function () {
     questionContainer.remove();
 }
 
-//var validateAnswer = function (correctAnswer, selectedAnswer) {
 var validateAnswer = function (answerEl) {
     // retrieving the correct answer and the chosen answer from the data attributes
     var correctAnswer = answerEl.getAttribute("data-correct-answer");
@@ -252,9 +271,18 @@ var validateAnswer = function (answerEl) {
         alert("That's correct!");
         //reward with a score increase
         score++;
+        //add footer with right answer
     } else {
+        // add footer with wrong answer
         alert("Sorry, that's not right");
-        // penalize with a timer reduction
+        // penalize with a timer reduction of 5 sec
+        if (timeLeft > 5) {
+            timeLeft = timeLeft - 5;
+        } else {
+            // if less than 5 sec remain, set timer to 0
+            timeLeft = 0;
+        }
+
 
     }
 }
@@ -263,6 +291,10 @@ var mainContainerHandler = function (event) {
     //console.dir(event.target);
 
     if (qCounter === 20) {
+        //validateAnswer(event.target.getAttribute("data-option"));
+        validateAnswer(event.target);
+        // remove current question
+        removeQuestion();
         //prompt game ending
         alert("Game completed!")
         //prompt to ask user name and generate score
