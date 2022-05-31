@@ -2,6 +2,7 @@ var startBtnEl = document.getElementById("start-quiz");
 var mainContainer = document.querySelector(".container");
 var introContainer = document.querySelector(".intro-container");
 var viewScoreBtn = document.getElementById("view-score");
+var headerEl = document.querySelector("header");
 var qCounter = 0;
 var score = 0;
 var timerEl = document.getElementById("timer");
@@ -11,6 +12,7 @@ feedbackEl.classList = "feedback";
 feedbackEl.id = "feedback-container";
 feedbackEl.textContent = "";
 var isGameOver = true;
+var canShowScore = true;
 
 var questionsObj = [{
     question: "What is JavaScript?",
@@ -264,7 +266,7 @@ var stopGame = function() {
     formTextEl.textContent = "Enter initials: ";
     var textboxEl = document.createElement("input");
     textboxEl.type = "text";
-    textboxEl.className = "form-text";
+    textboxEl.className = "text-box";
     textboxEl.name = "player-initials";
     var submitBtnEl = document.createElement("button");
     submitBtnEl.textContent = "Submit";
@@ -307,6 +309,7 @@ var startTimer = function() {
 
 var startQuiz = function () {
     isGameOver = false;
+    canShowScore = false;
     introContainer.remove();
     generateQuestion();  
     
@@ -350,6 +353,8 @@ var validateAnswer = function (answerEl) {
 }
 
 var scoreSubmit = function(event) {
+    
+    canShowScore = true;
     var playerInitials = document.querySelector("input[name='player-initials']").value;
     var scoresArr = [];
     var scoreObj = {};
@@ -361,6 +366,7 @@ var scoreSubmit = function(event) {
     scoresArr = localStorage.getItem("scores");
     scoresArr = JSON.parse(scoresArr);
 
+    // if localStorage is null (empty), initialize scoresArr
     if (!scoresArr) {
         scoresArr = [];
     }
@@ -375,7 +381,7 @@ var scoreSubmit = function(event) {
 
     scoreObj.playerInitials = playerInitials;
     scoreObj.score = score;
-    console.log(scoreObj);
+    //console.log(scoreObj);
     scoresArr.push(scoreObj);
 
     localStorage.setItem("scores", JSON.stringify(scoresArr));
@@ -402,6 +408,38 @@ var reloadPage = function() {
     // resetting to start on question 1
     qCounter = 0;
     feedbackEl.textContent = "";
+
+}
+
+var clearScores = function () {
+
+    var scoresArr = [];
+    // retrieve the scores (if any) from localStorage
+    scoresArr = localStorage.getItem("scores");
+    scoresArr = JSON.parse(scoresArr);
+
+    // if the data retrieved from localStorage is null, then nothing happens
+    // also, scores, highScore and highScorePlayer in localStorage are all created at the same time, so if one is missing, all are missing
+    if (!scoresArr) {
+        alert("nothing to clear");
+        
+    } else {
+        // else, the array is removed
+        localStorage.removeItem("scores");
+        localStorage.removeItem("highScore");
+        localStorage.removeItem("highScorePlayer");
+        document.getElementById("score-list-container").remove();
+    }
+
+
+
+}
+
+var goBack = function () {
+    document.getElementById("high-score-container").remove();
+    document.getElementById("score-button-container").remove();
+    mainContainer.appendChild(introContainer);
+    document.querySelector("body").prepend(headerEl);
 
 }
 
@@ -438,14 +476,25 @@ var mainContainerHandler = function (event) {
         scoreSubmit();
         // reset page to start fresh
         reloadPage();
+    } else if (event.target.id === "go-back") {
+        // console.log("go back to the previous screen");
+        goBack();
+    } else if (event.target.id === "clear-score") {
+        //console.log("clearing scores");
+        clearScores();
     }
     
 }
 
 var displayHighScore = function() {
+
+    if (canShowScore === false) {
+        alert("Quiz in progress! Complete the assessment then try again");
+        return false;
+    }
     //console.log("this will display the high scores");
-    var currentHighScore = localStorage.getItem("highScore");
-    var playerInitials = localStorage.getItem("highScorePlayer");
+    // var currentHighScore = localStorage.getItem("highScore");
+    // var playerInitials = localStorage.getItem("highScorePlayer");
     var scoresArr = [];
 
     scoresArr = localStorage.getItem("scores");
@@ -462,24 +511,29 @@ var displayHighScore = function() {
     // }
 
     var highScoreContainerEl = document.createElement("div");
+    highScoreContainerEl.id = "high-score-container"
     var highScoreHeaderEl = document.createElement("h2");
     highScoreHeaderEl.textContent = "High Scores";
 
     var highScoreListEl = document.createElement("ol");
+    var scoreListContainer = document.createElement("div");
+    scoreListContainer.id = "score-list-container";
 
-    var highScoreListItem = document.createElement("li");
-
+    
     for (var i = 0; i < scoresArr.length; i++) {
+        var highScoreListItem = document.createElement("li");
         highScoreListItem.textContent = `${scoresArr[i].playerInitials} - ${scoresArr[i].score}`;
         highScoreListEl.appendChild(highScoreListItem);
     }
 
-    highScoreContainerEl.append(highScoreHeaderEl, highScoreListEl);
+    scoreListContainer.appendChild(highScoreListEl);
+
+    highScoreContainerEl.append(highScoreHeaderEl, scoreListContainer);
     //console.log(highScoreContainerEl);
 
     var scoreBtnsContainer = document.createElement("div");
     scoreBtnsContainer.style.display = "inline-block";
-    // scoreBtnsContainer.style.flexWrap = "wrap";
+    scoreBtnsContainer.id = "score-button-container";
     // scoreBtnsContainer.style.alignContent = "start";
 
     var gobackBtnEl = document.createElement("button");
@@ -495,6 +549,8 @@ var displayHighScore = function() {
     scoreBtnsContainer.append(gobackBtnEl, clearScoresBtnEl);
 
     introContainer.remove();
+    // removing header
+    headerEl.remove();
 
     mainContainer.append(highScoreContainerEl,scoreBtnsContainer);
 
