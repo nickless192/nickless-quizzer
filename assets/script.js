@@ -351,12 +351,21 @@ var validateAnswer = function (answerEl) {
 
 var scoreSubmit = function(event) {
     var playerInitials = document.querySelector("input[name='player-initials']").value;
-    alert(`Submitting the follow score: ${score} points for player ${playerInitials}.`);
-
+    var scoresArr = [];
+    var scoreObj = {};
+    // making sure the player initials werent left blank
     if (playerInitials === "") {
         alert("Player initials cannot be blank, please enter your initials.");
         return false;
     }
+    scoresArr = localStorage.getItem("scores");
+    scoresArr = JSON.parse(scoresArr);
+
+    if (!scoresArr) {
+        scoresArr = [];
+    }
+
+    alert(`Submitting the follow score: ${score} points for player ${playerInitials}.`);
 
     var currentHighScore = localStorage.getItem("highScore");
 
@@ -364,8 +373,15 @@ var scoreSubmit = function(event) {
         currentHighScore = 0;
     }
 
-    localStorage.setItem("playerInitials", playerInitials);
-    localStorage.setItem("playerScore", score);
+    scoreObj.playerInitials = playerInitials;
+    scoreObj.score = score;
+    console.log(scoreObj);
+    scoresArr.push(scoreObj);
+
+    localStorage.setItem("scores", JSON.stringify(scoresArr));
+
+    //localStorage.setItem("playerInitials", playerInitials);
+    //localStorage.setItem("playerScore", score);
 
     if (score > currentHighScore) {
         localStorage.setItem("highScorePlayer", playerInitials);
@@ -430,12 +446,59 @@ var displayHighScore = function() {
     //console.log("this will display the high scores");
     var currentHighScore = localStorage.getItem("highScore");
     var playerInitials = localStorage.getItem("highScorePlayer");
+    var scoresArr = [];
 
-    if (currentHighScore === null && playerInitials === null) {
-        alert("No high score available yet! Play the game then try again!");
-    } else {
-        alert(`Current high score ${currentHighScore} by player ${playerInitials}.`)
+    scoresArr = localStorage.getItem("scores");
+    scoresArr = JSON.parse(scoresArr);
+
+    if (!scoresArr) {
+        scoresArr = [];
     }
+
+    // if (currentHighScore === null && playerInitials === null) {
+    //     alert("No high score available yet! Play the game then try again!");
+    // } else {
+    //     alert(`Current high score ${currentHighScore} by player ${playerInitials}.`)
+    // }
+
+    var highScoreContainerEl = document.createElement("div");
+    var highScoreHeaderEl = document.createElement("h2");
+    highScoreHeaderEl.textContent = "High Scores";
+
+    var highScoreListEl = document.createElement("ol");
+
+    var highScoreListItem = document.createElement("li");
+
+    for (var i = 0; i < scoresArr.length; i++) {
+        highScoreListItem.textContent = `${scoresArr[i].playerInitials} - ${scoresArr[i].score}`;
+        highScoreListEl.appendChild(highScoreListItem);
+    }
+
+    highScoreContainerEl.append(highScoreHeaderEl, highScoreListEl);
+    //console.log(highScoreContainerEl);
+
+    var scoreBtnsContainer = document.createElement("div");
+    scoreBtnsContainer.style.display = "inline-block";
+    // scoreBtnsContainer.style.flexWrap = "wrap";
+    // scoreBtnsContainer.style.alignContent = "start";
+
+    var gobackBtnEl = document.createElement("button");
+    var clearScoresBtnEl = document.createElement("button");
+    gobackBtnEl.className = "btn submit-btn";
+    gobackBtnEl.id = "go-back";
+    gobackBtnEl.textContent = "Go Back";
+    gobackBtnEl.style.marginRight = "10px";
+    clearScoresBtnEl.className = "btn submit-btn";
+    clearScoresBtnEl.id = "clear-score";
+    clearScoresBtnEl.textContent = "Clear Score";
+
+    scoreBtnsContainer.append(gobackBtnEl, clearScoresBtnEl);
+
+    introContainer.remove();
+
+    mainContainer.append(highScoreContainerEl,scoreBtnsContainer);
+
+
 }
 
 mainContainer.addEventListener("click", mainContainerHandler);
