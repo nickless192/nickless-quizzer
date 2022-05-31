@@ -4,6 +4,7 @@ var introContainer = document.querySelector(".intro-container");
 var viewScoreBtn = document.getElementById("view-score");
 var qCounter = 0;
 var score = 0;
+var timer = 75;
 
 var questionsObj = [{
     question: "What is JavaScript?",
@@ -87,7 +88,7 @@ var questionsObj = [{
     },
     answer: "a",
 }, {
-    question: "Which element is used for or styling HTML5 layout?",
+    question: "Which element is used for styling HTML5 layout?",
     options: {
         option1: "CSS",
         option2: "jQuery",
@@ -188,6 +189,7 @@ var questionsObj = [{
 },
 ]
 
+
 var generateQuestion = function() {
     var questionContainer = document.createElement("div");
     questionContainer.id = "question";
@@ -195,21 +197,29 @@ var generateQuestion = function() {
     var pEl = document.createElement("p");
     pEl.className = "question";
     pEl.textContent = questionsObj[qCounter].question;
-    //pEl.textContent = "Question description " + qCounter;
     
     var answerBtn1El = document.createElement("button");
     answerBtn1El.className = "btn question-btn";
     answerBtn1El.textContent = questionsObj[qCounter].options.option1;
+    answerBtn1El.setAttribute("data-option", "a");
+    answerBtn1El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     var answerBtn2El = document.createElement("button");
     answerBtn2El.className = "btn question-btn";
     answerBtn2El.textContent = questionsObj[qCounter].options.option2;
+    answerBtn2El.setAttribute("data-option", "b");
+    answerBtn2El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     var answerBtn3El = document.createElement("button");
     answerBtn3El.className = "btn question-btn";
     answerBtn3El.textContent = questionsObj[qCounter].options.option3;
+    answerBtn3El.setAttribute("data-option", "c");
+    answerBtn3El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     var answerBtn4El = document.createElement("button");
     answerBtn4El.className = "btn question-btn";
     answerBtn4El.textContent = questionsObj[qCounter].options.option4;
-    
+    answerBtn4El.setAttribute("data-option", "d");
+    answerBtn4El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
+
+
     questionContainer.append(pEl, answerBtn1El, answerBtn2El, answerBtn3El, answerBtn4El);
     
     mainContainer.appendChild(questionContainer);
@@ -218,19 +228,35 @@ var generateQuestion = function() {
 }
 
 var startQuiz = function () {
-    // clear the introContainer
-    //console.log("start quiz btn was pressed");
     
     introContainer.remove();
     generateQuestion();  
 
     // start timer counter
+
 }
 
 var removeQuestion = function () {
     var questionContainer = document.querySelector("#question");
     //alert("question is being removed");
     questionContainer.remove();
+}
+
+//var validateAnswer = function (correctAnswer, selectedAnswer) {
+var validateAnswer = function (answerEl) {
+    // retrieving the correct answer and the chosen answer from the data attributes
+    var correctAnswer = answerEl.getAttribute("data-correct-answer");
+    var selectedAnswer = answerEl.getAttribute("data-option");
+
+    if (selectedAnswer === correctAnswer) {
+        alert("That's correct!");
+        //reward with a score increase
+        score++;
+    } else {
+        alert("Sorry, that's not right");
+        // penalize with a timer reduction
+
+    }
 }
 
 var mainContainerHandler = function (event) {
@@ -241,13 +267,14 @@ var mainContainerHandler = function (event) {
         alert("Game completed!")
         //prompt to ask user name and generate score
 
-        //reset screen
+        //reset screen and game
 
     } else if (event.target.id === "start-quiz") {
         startQuiz();
-    } else { // already taking the quiz
+    } else if (event.target.hasAttribute("data-option")) { // already taking the quiz
         // call answer validation logic
-
+        //validateAnswer(event.target.getAttribute("data-option"));
+        validateAnswer(event.target);
         // remove current question
         removeQuestion();
         // prompt for a new question if there's time
