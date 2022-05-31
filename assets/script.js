@@ -6,6 +6,9 @@ var qCounter = 0;
 var score = 0;
 var timerEl = document.getElementById("timer");
 var timeLeft = 75;
+var feedbackEl = document.createElement("section");
+feedbackEl.classList = "feedback";
+feedbackEl.textContent = "";
 
 var questionsObj = [{
     question: "What is JavaScript?",
@@ -200,30 +203,36 @@ var generateQuestion = function() {
     pEl.textContent = questionsObj[qCounter].question;
     
     var answerBtn1El = document.createElement("button");
-    answerBtn1El.className = "btn question-btn";
-    answerBtn1El.textContent = questionsObj[qCounter].options.option1;
-    answerBtn1El.setAttribute("data-option", "a");
-    answerBtn1El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     var answerBtn2El = document.createElement("button");
-    answerBtn2El.className = "btn question-btn";
-    answerBtn2El.textContent = questionsObj[qCounter].options.option2;
-    answerBtn2El.setAttribute("data-option", "b");
-    answerBtn2El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     var answerBtn3El = document.createElement("button");
-    answerBtn3El.className = "btn question-btn";
-    answerBtn3El.textContent = questionsObj[qCounter].options.option3;
-    answerBtn3El.setAttribute("data-option", "c");
-    answerBtn3El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     var answerBtn4El = document.createElement("button");
+
+    answerBtn1El.className = "btn question-btn";
+    answerBtn2El.className = "btn question-btn";
+    answerBtn3El.className = "btn question-btn";
     answerBtn4El.className = "btn question-btn";
+    
+    answerBtn1El.textContent = questionsObj[qCounter].options.option1;
+    answerBtn2El.textContent = questionsObj[qCounter].options.option2;
+    answerBtn3El.textContent = questionsObj[qCounter].options.option3;
     answerBtn4El.textContent = questionsObj[qCounter].options.option4;
+    
+    answerBtn1El.setAttribute("data-option", "a");
+    answerBtn2El.setAttribute("data-option", "b");
+    answerBtn3El.setAttribute("data-option", "c");
     answerBtn4El.setAttribute("data-option", "d");
+    
+    answerBtn1El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
+    answerBtn2El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
+    answerBtn3El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
     answerBtn4El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
 
 
     questionContainer.append(pEl, answerBtn1El, answerBtn2El, answerBtn3El, answerBtn4El);
     
     mainContainer.appendChild(questionContainer);
+    //appends the footer with the correct/wrong alert
+    mainContainer.appendChild(feedbackEl);
     qCounter++;
 
 }
@@ -266,15 +275,14 @@ var validateAnswer = function (answerEl) {
     // retrieving the correct answer and the chosen answer from the data attributes
     var correctAnswer = answerEl.getAttribute("data-correct-answer");
     var selectedAnswer = answerEl.getAttribute("data-option");
+    var displayText = "";
 
     if (selectedAnswer === correctAnswer) {
-        alert("That's correct!");
+        displayText = "Correct!";
         //reward with a score increase
         score++;
-        //add footer with right answer
     } else {
-        // add footer with wrong answer
-        alert("Sorry, that's not right");
+        displayText = "Wrong!";
         // penalize with a timer reduction of 5 sec
         if (timeLeft > 5) {
             timeLeft = timeLeft - 5;
@@ -282,9 +290,12 @@ var validateAnswer = function (answerEl) {
             // if less than 5 sec remain, set timer to 0
             timeLeft = 0;
         }
-
-
     }
+    //var feedbackEl = document.createElement("section");
+    feedbackEl.style.borderTop = "2px solid var(--shadow)"
+    feedbackEl.textContent = displayText;
+    //mainContainer.appendChild(feedbackEl);
+
 }
 
 var mainContainerHandler = function (event) {

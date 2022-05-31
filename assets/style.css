@@ -69,31 +69,38 @@ header {
     top: -3px;
     box-shadow: 0 3px var(--shadow);
     color: white;
-  }
-  
-  .btn:hover {
-    box-shadow: 0 2px var(--shadow);
-    top: -2px;
-    background: var(--secondary);
-  }
-  .btn:active {
-    box-shadow: 0 0px var(--shadow);
-    top: 0;
-    background: var(--secondary);
-  }
+}
 
-  .start-btn {
-    padding: 0 auto;
-    width: fit-content;
-    margin: 0 auto;
-  }
+.btn:hover {
+box-shadow: 0 2px var(--shadow);
+top: -2px;
+background: var(--secondary);
+}
+.btn:active {
+box-shadow: 0 0px var(--shadow);
+top: 0;
+background: var(--secondary);
+}
 
-  .question-btn {
-    display: block;
-    margin-bottom: 15px;
-    text-align: left;
-  }
+.start-btn {
+padding: 0 auto;
+width: fit-content;
+margin: 0 auto;
+}
+
+.question-btn {
+display: block;
+margin-bottom: 15px;
+text-align: left;
+}
 
 #view-score:hover {
-    cursor: pointer;
+cursor: pointer;
+}
+
+.feedback {
+    padding-top: 15px;
+    font-size: 30px;
+    font-style: italic;
+    
 }
