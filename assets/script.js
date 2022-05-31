@@ -8,7 +8,9 @@ var timerEl = document.getElementById("timer");
 var timeLeft = 75;
 var feedbackEl = document.createElement("section");
 feedbackEl.classList = "feedback";
+feedbackEl.id = "feedback-container";
 feedbackEl.textContent = "";
+var isGameOver = true;
 
 var questionsObj = [{
     question: "What is JavaScript?",
@@ -243,7 +245,8 @@ var stopGame = function() {
     //feedbackEl.remove();
     timeLeft = 0;
 
-    console.log("game over! you score is " + score);
+    //console.log("game over! you score is " + score);
+    isGameOver = true;
 
     var doneHeaderEl = document.createElement("h2");
     doneHeaderEl.className = "main-title";
@@ -252,19 +255,29 @@ var stopGame = function() {
     scorePEl.className = "form-text";
     scorePEl = `Your final score is ${score}.`;
     var formEl = document.createElement("form");
+    formEl.style.display = "flex";
+    formEl.style.flexWrap = "wrap";
+    formEl.style.alignContent = "space-evenly";
+    formEl.style.width = "50%";
     var formTextEl = document.createElement("p");
     formTextEl.className = "form-text";
     formTextEl.textContent = "Enter initials: ";
     var textboxEl = document.createElement("input");
     textboxEl.type = "text";
     textboxEl.className = "form-text";
+    textboxEl.name = "player-initials";
     var submitBtnEl = document.createElement("button");
     submitBtnEl.textContent = "Submit";
-    submitBtnEl.className = "btn";
+    submitBtnEl.className = "btn submit-btn";
+    submitBtnEl.id = "submit-btn";
 
     formEl.append(formTextEl, textboxEl, submitBtnEl);
+    scoreContainer = document.createElement("div");
+    scoreContainer.id = "score-container";
 
-    mainContainer.prepend(doneHeaderEl, scorePEl, formEl);
+    scoreContainer.append(doneHeaderEl, scorePEl, formEl);
+    mainContainer.prepend(scoreContainer);
+    //mainContainer.prepend(doneHeaderEl, scorePEl, formEl);
 
 }
 
@@ -293,6 +306,7 @@ var startTimer = function() {
 }
 
 var startQuiz = function () {
+    isGameOver = false;
     introContainer.remove();
     generateQuestion();  
     
@@ -328,24 +342,64 @@ var validateAnswer = function (answerEl) {
         }
     }
     //var feedbackEl = document.createElement("section");
-    feedbackEl.style.borderTop = "2px solid var(--shadow)"
+    feedbackEl.style.borderTop = "2px solid var(--shadow)";
+    feedbackEl.style.marginTop = "15px";
     feedbackEl.textContent = displayText;
     //mainContainer.appendChild(feedbackEl);
+
+}
+
+var scoreSubmit = function(event) {
+    var playerInitials = document.querySelector("input[name='player-initials']").value;
+    alert(`Submitting the follow score: ${score} points for player ${playerInitials}.`);
+
+    if (playerInitials === "") {
+        alert("Player initials cannot be blank, please enter your initials.");
+        return false;
+    }
+
+    var currentHighScore = localStorage.getItem("highScore");
+
+    if (currentHighScore === null) {
+        currentHighScore = 0;
+    }
+
+    localStorage.setItem("playerInitials", playerInitials);
+    localStorage.setItem("playerScore", score);
+
+    if (score > currentHighScore) {
+        localStorage.setItem("highScorePlayer", playerInitials);
+        localStorage.setItem("highScore", score);
+    }
+    score = 0;
+}
+
+var reloadPage = function() {
+    //console.log("refreshing the page");
+    scoreContainerEl = document.getElementById("score-container");
+    feedbackContainer = document.getElementById("feedback-container");
+    scoreContainerEl.remove();
+    if (feedbackContainer !== null) {
+        feedbackContainer.remove();
+    }
+    mainContainer.appendChild(introContainer);
+    // resetting to start on question 1
+    qCounter = 0;
+    feedbackEl.textContent = "";
 
 }
 
 var mainContainerHandler = function (event) {
     //console.dir(event.target);
 
-    if (qCounter === 20) {
+    //console.log("still here");
+    event.preventDefault();
+
+    if (qCounter === 20 && !isGameOver) {
         //validateAnswer(event.target.getAttribute("data-option"));
         validateAnswer(event.target);
-        // remove current question
+        // stop the game
         stopGame();
-
-        //removeQuestion();
-        //prompt game ending
-        //alert("Game completed!")
         //prompt to ask user name and generate score
 
         //reset screen and game
@@ -354,22 +408,34 @@ var mainContainerHandler = function (event) {
         startQuiz();
     } else if (event.target.hasAttribute("data-option")) { // already taking the quiz
         // call answer validation logic
-        //validateAnswer(event.target.getAttribute("data-option"));
         validateAnswer(event.target);
         // remove current question
         removeQuestion();
         // prompt for a new question if there's time
         generateQuestion();
 
-    } else if (timeLeft === 0) {
+    } else if (timeLeft === 0 && !isGameOver) {
         // remove current question
         stopGame();
+    } else if (event.target.id === "submit-btn") {
+        // submit score to localStorage
+        scoreSubmit();
+        // reset page to start fresh
+        reloadPage();
     }
     
 }
 
 var displayHighScore = function() {
-    console.log("this will display the high scores");
+    //console.log("this will display the high scores");
+    var currentHighScore = localStorage.getItem("highScore");
+    var playerInitials = localStorage.getItem("highScorePlayer");
+
+    if (currentHighScore === null && playerInitials === null) {
+        alert("No high score available yet! Play the game then try again!");
+    } else {
+        alert(`Current high score ${currentHighScore} by player ${playerInitials}.`)
+    }
 }
 
 mainContainer.addEventListener("click", mainContainerHandler);
