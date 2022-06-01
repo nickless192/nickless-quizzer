@@ -22,7 +22,7 @@ var questionsObj = [{
         option3: "JavaScript is a compiled language used to make the website interactive",
         option4: "None of the mentioned"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "Arrays in JavaScript are defined by which of the following statements?",
     options: {
@@ -31,7 +31,7 @@ var questionsObj = [{
         option3: "It is an ordered list of string",
         option4: "It is an ordered list of functions"
     },
-    answer: "b",
+    answer: "2",
 }, {
     question: "Which of the following is not javascript data types?",
     options: {
@@ -40,7 +40,7 @@ var questionsObj = [{
         option3: "Number type",
         option4: "All of the mentioned"
     },
-    answer: "d",
+    answer: "4",
 }, {
     question: "Which of the following object is the main entry point to all client-side JavaScript features and APIs?",
     options: {
@@ -49,7 +49,7 @@ var questionsObj = [{
         option3: "Standard",
         option4: "Location"
     },
-    answer: "b",
+    answer: "2",
 }, {
     question: "Why are event handlers needed in JS?",
     options: {
@@ -58,7 +58,7 @@ var questionsObj = [{
         option3: "Change the server location",
         option4: "Performs handling of exceptions and occurrences"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "What is HTML?",
     options: {
@@ -67,7 +67,7 @@ var questionsObj = [{
         option3: "HTML consists of a set of elements that helps the browser how to view the content",
         option4: "All of the mentioned"
     },
-    answer: "d",
+    answer: "4",
 }, {
     question: "HTML stands for __________",
     options: {
@@ -76,7 +76,7 @@ var questionsObj = [{
         option3: "HyperText Marking Language",
         option4: "HighText Marking Language"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "Which of the following tag is used for inserting the largest heading in HTML?",
     options: {
@@ -85,7 +85,7 @@ var questionsObj = [{
         option3: "<h6>",
         option4: "heading"
     },
-    answer: "b",
+    answer: "2",
 }, {
     question: "In which part of the HTML metadata is contained?",
     options: {
@@ -94,7 +94,7 @@ var questionsObj = [{
         option3: "html tag",
         option4: "body tag"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "Which element is used for styling HTML5 layout?",
     options: {
@@ -103,7 +103,7 @@ var questionsObj = [{
         option3: "JavaScript",
         option4: "PHP"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "Which character is used to represent when a tag is closed in HTML?",
     options: {
@@ -112,7 +112,7 @@ var questionsObj = [{
         option3: "/",
         option4: '|'
     },
-    answer: "c",
+    answer: "3",
 }, {
     question: "Which tag is used to create a dropdown in HTML Form?",
     options: {
@@ -121,7 +121,7 @@ var questionsObj = [{
         option3: "<text>",
         option4: "<textarea>"
     },
-    answer: "b",
+    answer: "2",
 }, {
     question: "What is CSS?",
     options: {
@@ -130,7 +130,7 @@ var questionsObj = [{
         option3: "CSS is the language used to style the HTML documents",
         option4: "All of the mentioned"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "Which of the following CSS selectors are used to specify a group of elements?",
     options: {
@@ -139,7 +139,7 @@ var questionsObj = [{
         option3: "class",
         option4: "both class and tag"
     },
-    answer: "c",
+    answer: "3",
 }, {
     question: "Which of the following type of HTML tag is used to define an internal style sheet?",
     options: {
@@ -148,7 +148,7 @@ var questionsObj = [{
         option3: "<class>",
         option4: "<style>"
     },
-    answer: "d",
+    answer: "4",
 }, {
     question: "Which of the following CSS property is used to make the text bold?",
     options: {
@@ -157,7 +157,7 @@ var questionsObj = [{
         option3: "font-style: bold",
         option4: "text-align: bold"
     },
-    answer: "b",
+    answer: "2",
 }, {
     question: "Which of the following is the correct syntax to link an external style sheet in the HTML file?",
     options: {
@@ -166,7 +166,7 @@ var questionsObj = [{
         option3: "<style rel=”stylesheet” src=”style.css” />",
         option4: "<style rel=”stylesheet” link=”style.css” />"
     },
-    answer: "a",
+    answer: "1",
 }, {
     question: "Which of the following is the correct way to apply CSS Styles?",
     options: {
@@ -175,7 +175,7 @@ var questionsObj = [{
         option3: "inside the <head> section of an HTML page",
         option4: "all of the mentioned"
     },
-    answer: "d",
+    answer: "4",
 }, {
     question: "Which of the following CSS property is used to set the color of the text?",
     options: {
@@ -184,7 +184,7 @@ var questionsObj = [{
         option3: "colour",
         option4: "color"
     },
-    answer: "d",
+    answer: "4",
 }, {
     question: "Which of the following CSS Property sets the stacking order of positioned elements?",
     options: {
@@ -193,10 +193,17 @@ var questionsObj = [{
         option3: "x-index",
         option4: "all of the mentioned"
     },
-    answer: "b",
+    answer: "2",
 },
 ]
 
+var setupAnswerBtn = function(answerBtnEl, answerText, optionNumber, correctOption) {
+    answerBtnEl.className = "btn question-btn";
+    answerBtnEl.textContent = `${optionNumber}. ${answerText}`;
+    answerBtnEl.setAttribute("data-option", optionNumber);
+    answerBtnEl.setAttribute("data-correct-answer",correctOption);
+    return answerBtnEl;
+}
 
 var generateQuestion = function() {
     var questionContainer = document.createElement("div");
@@ -211,28 +218,18 @@ var generateQuestion = function() {
     var answerBtn3El = document.createElement("button");
     var answerBtn4El = document.createElement("button");
 
-    answerBtn1El.className = "btn question-btn";
-    answerBtn2El.className = "btn question-btn";
-    answerBtn3El.className = "btn question-btn";
-    answerBtn4El.className = "btn question-btn";
-    
-    answerBtn1El.textContent = questionsObj[qCounter].options.option1;
-    answerBtn2El.textContent = questionsObj[qCounter].options.option2;
-    answerBtn3El.textContent = questionsObj[qCounter].options.option3;
-    answerBtn4El.textContent = questionsObj[qCounter].options.option4;
-    
-    answerBtn1El.setAttribute("data-option", "a");
-    answerBtn2El.setAttribute("data-option", "b");
-    answerBtn3El.setAttribute("data-option", "c");
-    answerBtn4El.setAttribute("data-option", "d");
-    
-    answerBtn1El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
-    answerBtn2El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
-    answerBtn3El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
-    answerBtn4El.setAttribute("data-correct-answer",questionsObj[qCounter].answer);
+    // this is where you'd call the setupAnswerBtn function
+    answerBtn1El = setupAnswerBtn(answerBtn1El, questionsObj[qCounter].options.option1,"1", questionsObj[qCounter].answer);
+    answerBtn2El = setupAnswerBtn(answerBtn2El, questionsObj[qCounter].options.option2,"2", questionsObj[qCounter].answer);
+    answerBtn3El = setupAnswerBtn(answerBtn3El, questionsObj[qCounter].options.option3,"3", questionsObj[qCounter].answer);
+    answerBtn4El = setupAnswerBtn(answerBtn4El, questionsObj[qCounter].options.option4,"4", questionsObj[qCounter].answer);
 
+    var answerContainer = document.createElement("div");
+    answerContainer.className = "answer-container";
 
-    questionContainer.append(pEl, answerBtn1El, answerBtn2El, answerBtn3El, answerBtn4El);
+    answerContainer.append(answerBtn1El, answerBtn2El, answerBtn3El, answerBtn4El);
+
+    questionContainer.append(pEl, answerContainer);
     
     mainContainer.appendChild(questionContainer);
     //appends the footer with the correct/wrong alert
@@ -244,23 +241,21 @@ var generateQuestion = function() {
 var stopGame = function() {
 
     removeQuestion();
-    //feedbackEl.remove();
     timeLeft = 0;
 
-    //console.log("game over! you score is " + score);
     isGameOver = true;
 
+    // setting up page to capture user initials and to show their final score
     var doneHeaderEl = document.createElement("h2");
-    doneHeaderEl.className = "main-title";
+    doneHeaderEl.className = "section-header";
     doneHeaderEl.textContent = "All done!";
     var scorePEl = document.createElement("p");
     scorePEl.className = "form-text";
-    scorePEl = `Your final score is ${score}.`;
+    scorePEl.textContent = `Your final score is ${score}.`;
     var formEl = document.createElement("form");
     formEl.style.display = "flex";
     formEl.style.flexWrap = "wrap";
     formEl.style.alignContent = "space-evenly";
-    formEl.style.width = "50%";
     var formTextEl = document.createElement("p");
     formTextEl.className = "form-text";
     formTextEl.textContent = "Enter initials: ";
@@ -272,6 +267,8 @@ var stopGame = function() {
     submitBtnEl.textContent = "Submit";
     submitBtnEl.className = "btn submit-btn";
     submitBtnEl.id = "submit-btn";
+
+    // setting up containers and appending elements to them
 
     formEl.append(formTextEl, textboxEl, submitBtnEl);
     scoreContainer = document.createElement("div");
@@ -308,8 +305,12 @@ var startTimer = function() {
 }
 
 var startQuiz = function () {
+    // indicates quiz is in progress
     isGameOver = false;
+    // while quiz in progress, scores wont be shown
     canShowScore = false;
+
+    // remove intro container and generate the first question
     introContainer.remove();
     generateQuestion();  
     
@@ -344,9 +345,8 @@ var validateAnswer = function (answerEl) {
             timeLeft = 0;
         }
     }
-    //var feedbackEl = document.createElement("section");
+    
     feedbackEl.style.borderTop = "2px solid var(--shadow)";
-    feedbackEl.style.marginTop = "15px";
     feedbackEl.textContent = displayText;
     //mainContainer.appendChild(feedbackEl);
 
@@ -354,46 +354,46 @@ var validateAnswer = function (answerEl) {
 
 var scoreSubmit = function(event) {
     
-    canShowScore = true;
     var playerInitials = document.querySelector("input[name='player-initials']").value;
     var scoresArr = [];
     var scoreObj = {};
+
     // making sure the player initials werent left blank
     if (playerInitials === "") {
+        // if blank, alert user and return false which will prevent the page from executing the reload function
         alert("Player initials cannot be blank, please enter your initials.");
         return false;
     }
     scoresArr = localStorage.getItem("scores");
     scoresArr = JSON.parse(scoresArr);
-
+    
     // if localStorage is null (empty), initialize scoresArr
     if (!scoresArr) {
         scoresArr = [];
     }
-
+    
     alert(`Submitting the follow score: ${score} points for player ${playerInitials}.`);
-
+    
     var currentHighScore = localStorage.getItem("highScore");
-
+    
     if (currentHighScore === null) {
         currentHighScore = 0;
     }
-
+    // setting score and initials into the score Obj then pushing this object into the score array
     scoreObj.playerInitials = playerInitials;
     scoreObj.score = score;
-    //console.log(scoreObj);
     scoresArr.push(scoreObj);
-
+    
     localStorage.setItem("scores", JSON.stringify(scoresArr));
-
-    //localStorage.setItem("playerInitials", playerInitials);
-    //localStorage.setItem("playerScore", score);
-
+    
+    
     if (score > currentHighScore) {
         localStorage.setItem("highScorePlayer", playerInitials);
         localStorage.setItem("highScore", score);
     }
     score = 0;
+    canShowScore = true;
+    return true;
 }
 
 var reloadPage = function() {
@@ -436,27 +436,26 @@ var clearScores = function () {
 }
 
 var goBack = function () {
+    // remove the View High Score data containers
     document.getElementById("high-score-container").remove();
     document.getElementById("score-button-container").remove();
+
+    // reload the introductory container
     mainContainer.appendChild(introContainer);
+    // reload the header into the body, by prepending it to body
     document.querySelector("body").prepend(headerEl);
 
 }
 
 var mainContainerHandler = function (event) {
-    //console.dir(event.target);
-
-    //console.log("still here");
+    // prevent page reload after clicking on submit buttons
     event.preventDefault();
 
     if (qCounter === 20 && !isGameOver) {
-        //validateAnswer(event.target.getAttribute("data-option"));
+        // validate answer
         validateAnswer(event.target);
         // stop the game
         stopGame();
-        //prompt to ask user name and generate score
-
-        //reset screen and game
 
     } else if (event.target.id === "start-quiz") {
         startQuiz();
@@ -472,15 +471,16 @@ var mainContainerHandler = function (event) {
         // remove current question
         stopGame();
     } else if (event.target.id === "submit-btn") {
-        // submit score to localStorage
-        scoreSubmit();
-        // reset page to start fresh
-        reloadPage();
+        // submit score to localStorage in scoreSubmit. if scoreSubmit() returns false it means
+        // the user didn't input their initials and we prevent reloading the page
+        if (scoreSubmit()) {
+            reloadPage();
+        }
     } else if (event.target.id === "go-back") {
-        // console.log("go back to the previous screen");
+        // in view high score page, this function takes you back to the main page
         goBack();
     } else if (event.target.id === "clear-score") {
-        //console.log("clearing scores");
+        // in view high score page, this clears scores from localStorage
         clearScores();
     }
     
@@ -516,12 +516,14 @@ var displayHighScore = function() {
     highScoreHeaderEl.textContent = "High Scores";
 
     var highScoreListEl = document.createElement("ol");
+    highScoreListEl.className = "high-score-list";
     var scoreListContainer = document.createElement("div");
     scoreListContainer.id = "score-list-container";
 
     
     for (var i = 0; i < scoresArr.length; i++) {
         var highScoreListItem = document.createElement("li");
+        highScoreListItem.className = "high-score-item";
         highScoreListItem.textContent = `${scoresArr[i].playerInitials} - ${scoresArr[i].score}`;
         highScoreListEl.appendChild(highScoreListItem);
     }
@@ -544,7 +546,7 @@ var displayHighScore = function() {
     gobackBtnEl.style.marginRight = "10px";
     clearScoresBtnEl.className = "btn submit-btn";
     clearScoresBtnEl.id = "clear-score";
-    clearScoresBtnEl.textContent = "Clear Score";
+    clearScoresBtnEl.textContent = "Clear High Scores";
 
     scoreBtnsContainer.append(gobackBtnEl, clearScoresBtnEl);
 

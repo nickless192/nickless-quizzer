@@ -43,6 +43,12 @@ header {
     font-weight: bold;
 }
 
+.section-header {
+    text-align: left;
+    font-size: 36px;
+    font-weight: bold;
+}
+
 .intro {
     font-size: 24px;
     text-align: center;
@@ -53,8 +59,13 @@ header {
 .question {
     font-size: 30px;
     text-align: left;
-    padding: 0 50px;
     margin-bottom: 50px;
+}
+
+.answer-container{
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn {
@@ -65,20 +76,14 @@ header {
     background: var(--primary);
     font-size: 2.2rem;
     border-radius: 12px;
-    position: relative;
-    top: -3px;
     box-shadow: 0 3px var(--shadow);
     color: white;
+    cursor: pointer;
 }
 
 .btn:hover {
 box-shadow: 0 2px var(--shadow);
 top: -2px;
-background: var(--secondary);
-}
-.btn:active {
-box-shadow: 0 0px var(--shadow);
-top: 0;
 background: var(--secondary);
 }
 
@@ -92,6 +97,7 @@ margin: 0 auto;
 display: block;
 margin-bottom: 10px;
 text-align: left;
+width: 100%;
 }
 
 #view-score:hover {
@@ -103,25 +109,29 @@ cursor: pointer;
     font-size: 30px;
     font-style: italic;
     color: var(--shadow);
-    
+    margin-top: 15px;
+}
+
+.high-score-list {
+    font-size: 20px;
+    background-color: var(--shadow);
+    color: white;
+}
+
+.high-score-item {
+    padding: 5px;
 }
 
 .form-text {
     font-size: 20px;
-    /* margin-left: 15px; */
-    /* display: inline-block; */
 }
 
 .text-box {
     font-size: 20px;
     margin-left: 15px;
-    /* display: inline-block; */
 }
 
 .submit-btn {
-    /* padding: 0 auto; */
     font-size: 20px;
-    /* padding: 5px 10px; */
-    /* margin: 0 auto; */
     margin-left: 15px;
     }

@@ -20,3 +20,18 @@ THEN the game is over
 WHEN the game is over
 THEN I can save my initials and score
 
+## Screenshot of Deployed Site
+
+### Password Generator Landing Page
+ ![Password Generator Landing Page](./assets/images/random-password-generator-screenshot.png)
+
+
+## Links
+
+GitHub link: https://github.com/nickless192/nickless-quizzer
+
+Deployed Page: https://nickless192.github.io/nickless-quizzer/
+
+## Contributors
+
+Made with ❤️ by Nickless192 (Omar Rodriguez)
